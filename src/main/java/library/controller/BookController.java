@@ -1,11 +1,16 @@
 package library.controller;
 
-import library.infrastructure.entity.BookEntity;
+import library.controller.DTO.BookDTO.CreateBookDTO;
+import library.controller.DTO.BookDTO.CreateBookResponseDTO;
+import library.controller.DTO.BookDTO.GetBookDTO;
 import library.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Stream;
 
 
 @RestController
@@ -20,7 +25,7 @@ public class BookController {
 
     @PostMapping("/add")
     @ResponseStatus(code= HttpStatus.CREATED)
-    public ResponseEntity<BookEntity> addBook(@RequestBody BookEntity book) {
+    public ResponseEntity<CreateBookResponseDTO> addBook(@RequestBody CreateBookDTO book) {
         var newBook = bookService.addBook(book);
         return new ResponseEntity<>(newBook, HttpStatus.CREATED);
     }
@@ -32,12 +37,12 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public BookEntity getOne(@PathVariable int id) {
+    public GetBookDTO getOne(@PathVariable int id) {
         return bookService.getOne(id);
     }
 
     @GetMapping("/get")
-    public @ResponseBody Iterable<BookEntity> getAll() {
+    public @ResponseBody List<GetBookDTO> getAll() {
         return bookService.getAll();
     }
 }
