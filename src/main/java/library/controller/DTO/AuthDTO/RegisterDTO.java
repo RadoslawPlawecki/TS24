@@ -1,11 +1,19 @@
 package library.controller.DTO.AuthDTO;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import library.common.UserRole;
 
 public class RegisterDTO {
+    @NotBlank(message = "Password is required!")
     private String password;
+    @NotBlank(message = "Username is required!")
     private String username;
+    @NotNull
     private UserRole role;
+    @NotBlank(message = "Email is required!")
+    @Email
     private String email;
 
     public RegisterDTO(String password, String username, UserRole role, String email) {

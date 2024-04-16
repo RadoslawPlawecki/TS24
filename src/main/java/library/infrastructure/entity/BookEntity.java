@@ -2,6 +2,8 @@ package library.infrastructure.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "books", schema = "library")
 public class BookEntity {
@@ -27,6 +29,7 @@ public class BookEntity {
     @Basic
     @Column(name = "available_copies")
     private Integer availableCopies;
+
 
     public Integer getId() {
         return id;

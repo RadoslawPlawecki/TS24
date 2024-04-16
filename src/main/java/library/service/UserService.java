@@ -1,5 +1,6 @@
 package library.service;
 
+import library.exception.UserNotFound;
 import library.infrastructure.entity.UserEntity;
 import library.infrastructure.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class UserService {
     }
 
     public UserEntity getOne(int id) {
-        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found!"));
+        return userRepository.findById(id).orElseThrow(() -> UserNotFound.create(id));
     }
 
     public UserEntity addUser(UserEntity user) {
@@ -28,7 +29,7 @@ public class UserService {
 
     public void deleteUser(int id) {
         if (!userRepository.existsById(id)) {
-            throw new RuntimeException("The user doesn't exist in the database!");
+            throw UserNotFound.create(id);
         }
         userRepository.deleteById(id);
     }

@@ -1,5 +1,6 @@
 package library.controller;
 
+import jakarta.annotation.security.PermitAll;
 import library.controller.DTO.AuthDTO.LoginDTO;
 import library.controller.DTO.AuthDTO.LoginResponseDTO;
 import library.controller.DTO.AuthDTO.RegisterDTO;
@@ -9,10 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
+@PreAuthorize("hasRole('ADMIN')")
 public class AuthController {
     private final AuthService authService;
     @Autowired
@@ -21,8 +24,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<RegisterResponseDTO> register(@RequestBody RegisterDTO registerDTO) {
+    public ResponseEntity<RegisterResponseDTO> register(@Validated @RequestBody RegisterDTO registerDTO) {
         RegisterResponseDTO registerResponseDTO = authService.register(registerDTO);
         return new ResponseEntity<>(registerResponseDTO, HttpStatus.CREATED);
     }

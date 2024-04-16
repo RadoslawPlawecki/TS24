@@ -3,6 +3,7 @@ package library.service;
 import library.controller.DTO.BookDTO.CreateBookDTO;
 import library.controller.DTO.BookDTO.CreateBookResponseDTO;
 import library.controller.DTO.BookDTO.GetBookDTO;
+import library.exception.BookNotFound;
 import library.infrastructure.entity.BookEntity;
 import library.infrastructure.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class BookService {
@@ -24,12 +24,12 @@ public class BookService {
 
     public List<GetBookDTO> getAll() {
         ArrayList<BookEntity> books = (ArrayList<BookEntity>) bookRepository.findAll();
-        return books.stream().map((book) -> new GetBookDTO(book.getId(), book.getIsbn(), book.getTitle(), book.getAuthor(), book.getPublisher(), book.getPublicationYear(), book.getAvailableCopies() > 0)).collect(Collectors.toList());
+        return books.stream().map(this::mapBook).collect(Collectors.toList());
     }
 
     public GetBookDTO getOne(int id) {
-        var book = bookRepository.findById(id).orElseThrow(() -> new RuntimeException("Book not found!"));
-        return new GetBookDTO(book.getId(), book.getIsbn(), book.getTitle(), book.getAuthor(), book.getPublisher(), book.getPublicationYear(), book.getAvailableCopies() > 0);
+        var book = bookRepository.findById(id).orElseThrow(() -> BookNotFound.create(id));
+        return mapBook(book);
     }
 
     public CreateBookResponseDTO addBook(CreateBookDTO book) {
@@ -46,8 +46,12 @@ public class BookService {
 
     public void deleteBook(int id) {
         if (!bookRepository.existsById(id)) {
-            throw new RuntimeException("The book doesn't exist in the database!");
+            throw BookNotFound.create(id);
         }
         bookRepository.deleteById(id);
+    }
+
+    private GetBookDTO mapBook(BookEntity book) {
+        return new GetBookDTO(book.getId(), book.getIsbn(), book.getTitle(), book.getAuthor(), book.getPublisher(), book.getPublicationYear(), book.getAvailableCopies() > 0);
     }
 }
