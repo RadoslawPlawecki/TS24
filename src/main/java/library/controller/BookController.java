@@ -7,6 +7,7 @@ import library.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/book")
+@PreAuthorize("hasRole('ADMIN')")
 public class BookController {
     private final BookService bookService;
 
@@ -37,11 +39,13 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_READER')")
     public GetBookDTO getOne(@PathVariable int id) {
         return bookService.getOne(id);
     }
 
     @GetMapping("/get")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_READER')")
     public @ResponseBody List<GetBookDTO> getAll() {
         return bookService.getAll();
     }

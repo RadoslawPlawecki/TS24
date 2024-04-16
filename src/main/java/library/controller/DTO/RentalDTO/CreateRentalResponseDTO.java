@@ -1,31 +1,24 @@
-package library.infrastructure.entity;
+package library.controller.DTO.RentalDTO;
 
-import jakarta.persistence.*;
+import library.infrastructure.entity.BookEntity;
+import library.infrastructure.entity.UserEntity;
 
 import java.sql.Date;
 
-@Entity
-@Table(name = "rentals", schema = "library")
-public class RentalEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true)
+public class CreateRentalResponseDTO {
     private Integer id;
-    @JoinColumn(name = "book_id", referencedColumnName = "id", nullable = false)
-    @ManyToOne
     private BookEntity book;
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    @ManyToOne
     private UserEntity user;
-    @Basic
-    @Column(name = "start_date", nullable = false)
     private Date startDate;
-    @Basic
-    @Column(name = "end_date", nullable = false)
     private Date endDate;
-    @Basic
-    @Column(name = "return_date")
-    private Date returnDate;
+
+    public CreateRentalResponseDTO(Integer id, BookEntity book, UserEntity user, Date startDate, Date endDate) {
+        this.id = id;
+        this.book = book;
+        this.user = user;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 
     public Integer getId() {
         return id;
@@ -65,13 +58,5 @@ public class RentalEntity {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
-    }
-
-    public Date getReturnDate() {
-        return returnDate;
-    }
-
-    public void setReturnDate(Date returnDate) {
-        this.returnDate = returnDate;
     }
 }
