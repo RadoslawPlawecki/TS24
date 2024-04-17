@@ -1,30 +1,16 @@
-package library.infrastructure.entity;
+package library.controller.DTO.ReviewDTO;
 
-import jakarta.persistence.*;
+import library.infrastructure.entity.BookEntity;
+import library.infrastructure.entity.UserEntity;
 
 import java.sql.Date;
 
-@Entity
-@Table(name = "reviews", schema = "library")
-public class ReviewEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true)
+public class EditReviewResponseDTO {
     private Integer id;
-    @JoinColumn(name = "book_id", referencedColumnName = "id", nullable = false)
-    @ManyToOne
     private BookEntity book;
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    @ManyToOne
     private UserEntity user;
-    @Basic
-    @Column(name = "rating", nullable = false)
     private Integer rating;
-    @Basic
-    @Column(name = "comment")
     private String comment;
-    @Basic
-    @Column(name = "review_date")
     private Date reviewDate;
 
     public Integer getId() {
@@ -73,5 +59,17 @@ public class ReviewEntity {
 
     public void setReviewDate(Date reviewDate) {
         this.reviewDate = reviewDate;
+    }
+
+    public EditReviewResponseDTO(Integer id, BookEntity book, UserEntity user, Integer rating, String comment, Date reviewDate) {
+        this.id = id;
+        this.book = book;
+        this.user = user;
+        this.rating = rating;
+        this.comment = comment;
+        this.reviewDate = reviewDate;
+    }
+
+    public EditReviewResponseDTO() {
     }
 }

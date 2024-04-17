@@ -17,9 +17,6 @@ public class UserEntity {
     @Basic
     @Column(name = "name")
     private String name;
-    @Basic
-    @Column(name = "full_name")
-    private String fullName;
 
 
     public Integer getId() {
@@ -42,15 +39,7 @@ public class UserEntity {
         return name;
     }
 
-    public void setName(String fullName) {
+    public void setName(String name) {
         this.name = name;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
     }
 }

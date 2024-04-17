@@ -1,20 +1,9 @@
 package library.controller.DTO.UserDTO;
 
-public class GetUserDTO {
+public class GetUserSimplifiedDTO {
     private Integer id;
     private String name;
     private String email;
-    private String fullName;
-
-    public GetUserDTO() {
-    }
-
-    public GetUserDTO(Integer id, String name, String email, String fullName) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.fullName = fullName;
-    }
 
     public Integer getId() {
         return id;
@@ -31,6 +20,7 @@ public class GetUserDTO {
     public void setName(String name) {
         this.name = name;
     }
+
     public String getEmail() {
         return email;
     }
@@ -39,11 +29,12 @@ public class GetUserDTO {
         this.email = email;
     }
 
-    public String getFullName() {
-        return fullName;
+    public GetUserSimplifiedDTO(Integer id, String name, String email) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public GetUserSimplifiedDTO() {
     }
 }

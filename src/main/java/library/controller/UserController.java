@@ -1,27 +1,24 @@
 package library.controller;
 
-import library.infrastructure.entity.UserEntity;
+import library.controller.DTO.UserDTO.GetUserFullDTO;
 import library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
+@PreAuthorize("hasRole('ADMIN')")
 public class UserController {
     private final UserService userService;
 
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
-    }
-
-    @PostMapping("/add")
-    @ResponseStatus(code= HttpStatus.CREATED)
-    public ResponseEntity<UserEntity> addUser(@RequestBody UserEntity user) {
-        var newUser = userService.addUser(user);
-        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
@@ -31,12 +28,14 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public UserEntity getOne(@PathVariable int id) {
-        return userService.getOne(id);
+    public ResponseEntity<GetUserFullDTO> getOne(@PathVariable int id) {
+        GetUserFullDTO getUserDTO = userService.getOne(id);
+        return new ResponseEntity<>(getUserDTO, HttpStatus.OK);
     }
 
     @GetMapping("/get")
-    public @ResponseBody Iterable<UserEntity> getAll() {
-        return userService.getAll();
+    public @ResponseBody ResponseEntity<List<GetUserFullDTO>> getAll() {
+        List<GetUserFullDTO> getUserDTO = userService.getAll();
+        return new ResponseEntity<>(getUserDTO, HttpStatus.OK);
     }
 }

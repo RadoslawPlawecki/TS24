@@ -1,10 +1,15 @@
 package library.controller;
 
+import library.controller.DTO.ReviewDTO.CreateReviewDTO;
+import library.controller.DTO.ReviewDTO.CreateReviewResponseDTO;
+import library.controller.DTO.ReviewDTO.EditReviewDTO;
+import library.controller.DTO.ReviewDTO.EditReviewResponseDTO;
 import library.infrastructure.entity.ReviewEntity;
 import library.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,9 +24,16 @@ public class ReviewController {
 
     @PostMapping("/add")
     @ResponseStatus(code= HttpStatus.CREATED)
-    public ResponseEntity<ReviewEntity> addReview(@RequestBody ReviewEntity review) {
+    public ResponseEntity<CreateReviewResponseDTO> addReview(@RequestBody CreateReviewDTO review) {
         var newReview = reviewService.addReview(review);
         return new ResponseEntity<>(newReview, HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/edit")
+    @ResponseStatus(code = HttpStatus.OK)
+    public ResponseEntity<EditReviewResponseDTO> editReview(@RequestBody EditReviewDTO review) {
+        var editedReview = reviewService.editReview(review);
+        return new ResponseEntity<>(editedReview, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

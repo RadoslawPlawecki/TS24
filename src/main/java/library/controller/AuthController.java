@@ -1,6 +1,5 @@
 package library.controller;
 
-import jakarta.annotation.security.PermitAll;
 import library.controller.DTO.AuthDTO.LoginDTO;
 import library.controller.DTO.AuthDTO.LoginResponseDTO;
 import library.controller.DTO.AuthDTO.RegisterDTO;
@@ -31,7 +30,7 @@ public class AuthController {
 
     @PostMapping("/login")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<LoginResponseDTO> login(@Validated @RequestBody LoginDTO loginDTO) {
         LoginResponseDTO loginResponseDTO = authService.login(loginDTO);
         return new ResponseEntity<>(loginResponseDTO, HttpStatus.CREATED);
     }

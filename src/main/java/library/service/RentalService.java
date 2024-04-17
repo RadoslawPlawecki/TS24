@@ -1,10 +1,9 @@
 package library.service;
 
 import library.controller.DTO.BookDTO.GetBookDTO;
-import library.controller.DTO.RentalDTO.CreateRentalDTO;
-import library.controller.DTO.RentalDTO.CreateRentalResponseDTO;
-import library.controller.DTO.RentalDTO.GetRentalDTO;
-import library.controller.DTO.UserDTO.GetUserDTO;
+import library.controller.DTO.RentalDTO.*;
+import library.controller.DTO.UserDTO.GetUserFullDTO;
+import library.controller.DTO.UserDTO.GetUserSimplifiedDTO;
 import library.exception.BookNotFound;
 import library.exception.RentalNotFound;
 import library.exception.UserNotFound;
@@ -20,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -66,9 +64,16 @@ public class RentalService {
         rentalRepository.deleteById(id);
     }
 
+    public UpdateRentalResponseDTO updateRental(UpdateRentalDTO updateRentalDTO) {
+        RentalEntity rental = rentalRepository.findById(updateRentalDTO.getId()).orElseThrow(() -> RentalNotFound.create(updateRentalDTO.getId()));
+        rental.setReturnDate(updateRentalDTO.getReturnDate());
+        rentalRepository.save(rental);
+        return new UpdateRentalResponseDTO(rental.getId(), rental.getBook(), rental.getUser(), rental.getStartDate(), rental.getEndDate(), rental.getReturnDate());
+    }
+
     private GetRentalDTO mapRental(RentalEntity rental) {
         GetBookDTO book = new GetBookDTO(rental.getBook().getId(), rental.getBook().getIsbn(), rental.getBook().getTitle(), rental.getBook().getAuthor(), rental.getBook().getPublisher(), rental.getBook().getPublicationYear(), rental.getBook().getAvailableCopies() > 0);
-        GetUserDTO user = new GetUserDTO(rental.getUser().getId(), rental.getUser().getName(), rental.getUser().getEmail(), rental.getUser().getFullName());
-        return new GetRentalDTO(rental.getId(), book, user, rental.getStartDate(), rental.getEndDate());
+        GetUserSimplifiedDTO user = new GetUserSimplifiedDTO(rental.getUser().getId(), rental.getUser().getName(), rental.getUser().getEmail());
+        return new GetRentalDTO(rental.getId(), book, user, rental.getStartDate(), rental.getEndDate(), rental.getReturnDate() != null);
     }
 }

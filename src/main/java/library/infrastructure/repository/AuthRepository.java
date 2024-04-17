@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface AuthRepository extends CrudRepository<AuthEntity, Integer> {
     Optional<AuthEntity> findByUsername(String username);
+    Optional<AuthEntity> findByUserId(int userId);
+    void deleteByUserId(int userId);
 }

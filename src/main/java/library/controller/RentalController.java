@@ -1,9 +1,8 @@
 package library.controller;
 
+import jakarta.validation.Valid;
 import library.controller.DTO.BookDTO.CreateBookResponseDTO;
-import library.controller.DTO.RentalDTO.CreateRentalDTO;
-import library.controller.DTO.RentalDTO.CreateRentalResponseDTO;
-import library.controller.DTO.RentalDTO.GetRentalDTO;
+import library.controller.DTO.RentalDTO.*;
 import library.infrastructure.entity.RentalEntity;
 import library.service.RentalService;
 import org.apache.coyote.Response;
@@ -18,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/rental")
-@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_READER')")
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class RentalController {
     private final RentalService rentalService;
 
@@ -50,5 +49,12 @@ public class RentalController {
     public @ResponseBody ResponseEntity<List<GetRentalDTO>> getAll() {
         List<GetRentalDTO> getRentalDTO = rentalService.getAll();
         return new ResponseEntity<>(getRentalDTO, HttpStatus.OK);
+    }
+
+    @PatchMapping("/update")
+    @ResponseStatus(code = HttpStatus.OK)
+    public ResponseEntity<UpdateRentalResponseDTO> updateRental(@RequestBody @Validated UpdateRentalDTO updateRentalDTO) {
+        var rentalUpdated = rentalService.updateRental(updateRentalDTO);
+        return new ResponseEntity<>(rentalUpdated, HttpStatus.OK);
     }
 }

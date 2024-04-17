@@ -42,6 +42,7 @@ public class AuthService {
         }
         UserEntity userEntity = new UserEntity();
         userEntity.setEmail(registerDTO.getEmail());
+        userEntity.setName(registerDTO.getName());
         userRepository.save(userEntity);
         AuthEntity authEntity = new AuthEntity();
         if (!PasswordValidator.isValidPassword(registerDTO.getPassword())) {

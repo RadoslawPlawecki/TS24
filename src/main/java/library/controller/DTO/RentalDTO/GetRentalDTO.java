@@ -1,18 +1,17 @@
 package library.controller.DTO.RentalDTO;
 
 import library.controller.DTO.BookDTO.GetBookDTO;
-import library.controller.DTO.UserDTO.GetUserDTO;
-import library.infrastructure.entity.BookEntity;
-import library.infrastructure.entity.UserEntity;
+import library.controller.DTO.UserDTO.GetUserSimplifiedDTO;
 
 import java.sql.Date;
 
 public class GetRentalDTO {
     private Integer id;
     private GetBookDTO book;
-    private GetUserDTO user;
+    private GetUserSimplifiedDTO user;
     private Date startDate;
     private Date endDate;
+    private boolean wasReturned;
 
     public Integer getId() {
         return id;
@@ -30,11 +29,11 @@ public class GetRentalDTO {
         this.book = book;
     }
 
-    public GetUserDTO getUser() {
+    public GetUserSimplifiedDTO getUser() {
         return user;
     }
 
-    public void setUser(GetUserDTO user) {
+    public void setUser(GetUserSimplifiedDTO user) {
         this.user = user;
     }
 
@@ -54,14 +53,23 @@ public class GetRentalDTO {
         this.endDate = endDate;
     }
 
+    public boolean isWasReturned() {
+        return wasReturned;
+    }
+
+    public void setWasReturned(boolean wasReturned) {
+        this.wasReturned = wasReturned;
+    }
+
     public GetRentalDTO() {
     }
 
-    public GetRentalDTO(Integer id, GetBookDTO book, GetUserDTO user, Date startDate, Date endDate) {
+    public GetRentalDTO(Integer id, GetBookDTO book, GetUserSimplifiedDTO user, Date startDate, Date endDate, boolean wasReturned) {
         this.id = id;
         this.book = book;
         this.user = user;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.wasReturned = wasReturned;
     }
 }
