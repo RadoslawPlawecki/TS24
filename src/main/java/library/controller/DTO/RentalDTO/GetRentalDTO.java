@@ -1,16 +1,23 @@
 package library.controller.DTO.RentalDTO;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import library.controller.DTO.BookDTO.GetBookDTO;
 import library.controller.DTO.UserDTO.GetUserSimplifiedDTO;
 
 import java.sql.Date;
 
 public class GetRentalDTO {
+    @Schema(name = "id", example = "1")
     private Integer id;
+    @Schema(name = "book")
     private GetBookDTO book;
+    @Schema(name = "userSimplified")
     private GetUserSimplifiedDTO user;
+    @Schema(name = "startDate", example = "2024-06-06")
     private Date startDate;
+    @Schema(name = "endDate", example = "2025-05-04")
     private Date endDate;
+    @Schema(name = "wasReturned", example = "true")
     private boolean wasReturned;
 
     public Integer getId() {

@@ -1,10 +1,17 @@
 package library.controller.DTO.UserDTO;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class GetUserFullDTO {
+    @Schema(name = "id", example = "2")
     private Integer id;
+    @Schema(name = "name", example = "John Doe")
     private String name;
+    @Schema(name = "username", example = "username")
     private String username;
+    @Schema(name = "email", example = "john.doe@gmail.com")
     private String email;
+    @Schema(name = "role", example = "ROLE_READER")
     private String role;
 
     public GetUserFullDTO() {

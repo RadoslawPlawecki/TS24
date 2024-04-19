@@ -1,10 +1,14 @@
 package library.controller.DTO.AuthDTO;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import library.common.UserRole;
 
 public class RegisterResponseDTO {
+    @Schema(name = "userId", example = "1")
     private Integer userID;
+    @Schema(name = "username", example = "username")
     private String username;
+    @Schema(name = "role", example = "ROLE_READER")
     private UserRole role;
 
     public RegisterResponseDTO(Integer userID, String username, UserRole role) {

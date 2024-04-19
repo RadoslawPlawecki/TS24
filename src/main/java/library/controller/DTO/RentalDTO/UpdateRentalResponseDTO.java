@@ -1,16 +1,23 @@
 package library.controller.DTO.RentalDTO;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import library.infrastructure.entity.BookEntity;
 import library.infrastructure.entity.UserEntity;
 
 import java.sql.Date;
 
 public class UpdateRentalResponseDTO {
+    @Schema(name = "id")
     private Integer id;
+    @Schema(name = "book")
     private BookEntity book;
+    @Schema(name = "user")
     private UserEntity user;
+    @Schema(name = "startDate", example = "2024-06-06")
     private Date startDate;
+    @Schema(name = "endDate", example = "2025-05-04")
     private Date endDate;
+    @Schema(name = "returnDate", example = "2024-08-07")
     private Date returnDate;
 
     public UpdateRentalResponseDTO(Integer id, BookEntity book, UserEntity user, Date startDate, Date endDate, Date returnDate) {

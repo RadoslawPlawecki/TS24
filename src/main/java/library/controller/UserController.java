@@ -1,5 +1,6 @@
 package library.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import library.controller.DTO.UserDTO.GetUserFullDTO;
 import library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,11 +9,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
 @RequestMapping("/user")
 @PreAuthorize("hasRole('ADMIN')")
+@Tag(name = "User")
 public class UserController {
     private final UserService userService;
 
@@ -28,8 +31,16 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GetUserFullDTO> getOne(@PathVariable int id) {
-        GetUserFullDTO getUserDTO = userService.getOne(id);
+    public ResponseEntity<GetUserFullDTO> getById(@PathVariable int id) {
+        GetUserFullDTO getUserDTO = userService.getById(id);
+        return new ResponseEntity<>(getUserDTO, HttpStatus.OK);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/get/me")
+    public ResponseEntity<GetUserFullDTO> getByUsername(Principal principal) {
+        String username = principal.getName();
+        GetUserFullDTO getUserDTO = userService.getByUsername(username);
         return new ResponseEntity<>(getUserDTO, HttpStatus.OK);
     }
 

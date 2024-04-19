@@ -1,14 +1,19 @@
 package library.controller.DTO.ReviewDTO;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 
 public class CreateReviewDTO {
     @NotNull
+    @Schema(name = "bookId", example = "2")
     private Integer bookId;
     @NotNull
+    @Schema(name = "userId", example = "5")
     private Integer userId;
     @NotNull
+    @Schema(name = "rating", example = "10")
     private Integer rating;
+    @Schema(name = "comment", example = "Amazing!")
     private String comment;
 
     public Integer getBookId() {

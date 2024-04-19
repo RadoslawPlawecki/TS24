@@ -1,11 +1,8 @@
 package library.controller;
 
-import jakarta.validation.Valid;
-import library.controller.DTO.BookDTO.CreateBookResponseDTO;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import library.controller.DTO.RentalDTO.*;
-import library.infrastructure.entity.RentalEntity;
 import library.service.RentalService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +14,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/rental")
-@PreAuthorize("hasRole('ROLE_ADMIN')")
+@PreAuthorize("hasRole('ADMIN')")
+@Tag(name = "Rental")
 public class RentalController {
     private final RentalService rentalService;
 
@@ -28,8 +26,8 @@ public class RentalController {
 
     @PostMapping("/add")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public ResponseEntity<CreateRentalResponseDTO> addRental(@RequestBody @Validated CreateRentalDTO rental) {
-        var newRental = rentalService.addRental(rental);
+    public ResponseEntity<CreateRentalResponseDTO> addRental(@RequestBody @Validated CreateRentalDTO rentalDTO) {
+        var newRental = rentalService.addRental(rentalDTO);
         return new ResponseEntity<>(newRental, HttpStatus.CREATED);
     }
 
@@ -40,21 +38,21 @@ public class RentalController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GetRentalDTO> getOne(@PathVariable int id) {
-        GetRentalDTO getRentalDTO = rentalService.getOne(id);
+    public ResponseEntity<GetRentalDTO> getById(@PathVariable int id) {
+        GetRentalDTO getRentalDTO = rentalService.getById(id);
         return new ResponseEntity<>(getRentalDTO, HttpStatus.OK);
     }
 
     @GetMapping("/get")
-    public @ResponseBody ResponseEntity<List<GetRentalDTO>> getAll() {
-        List<GetRentalDTO> getRentalDTO = rentalService.getAll();
+    public @ResponseBody ResponseEntity<List<GetRentalDTO>> getAll(@RequestParam(required = false) Integer userId) {
+        List<GetRentalDTO> getRentalDTO = rentalService.getAll(userId);
         return new ResponseEntity<>(getRentalDTO, HttpStatus.OK);
     }
 
     @PatchMapping("/update")
     @ResponseStatus(code = HttpStatus.OK)
-    public ResponseEntity<UpdateRentalResponseDTO> updateRental(@RequestBody @Validated UpdateRentalDTO updateRentalDTO) {
-        var rentalUpdated = rentalService.updateRental(updateRentalDTO);
+    public ResponseEntity<UpdateRentalResponseDTO> updateRental(@RequestBody UpdateRentalDTO rentalDTO) {
+        var rentalUpdated = rentalService.updateRental(rentalDTO);
         return new ResponseEntity<>(rentalUpdated, HttpStatus.OK);
     }
 }

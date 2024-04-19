@@ -3,7 +3,7 @@ package library.controller.DTO.BookDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 
-public class CreateBookResponseDTO {
+public class EditBookDTO {
     @Schema(name = "id", example = "1")
     @NotBlank(message = "Identification number of a book is required!")
     private Integer id;
@@ -25,19 +25,6 @@ public class CreateBookResponseDTO {
     @Schema(name = "availableCopies", example = "60")
     @NotBlank(message = "Number of available copies is required!")
     private int availableCopies;
-
-    public CreateBookResponseDTO() {
-    }
-
-    public CreateBookResponseDTO(Integer id, String isbn, String title, String author, String publisher, Integer publicationYear, int availableCopies) {
-        this.id = id;
-        this.isbn = isbn;
-        this.title = title;
-        this.author = author;
-        this.publisher = publisher;
-        this.publicationYear = publicationYear;
-        this.availableCopies = availableCopies;
-    }
 
     public Integer getId() {
         return id;
@@ -93,5 +80,18 @@ public class CreateBookResponseDTO {
 
     public void setAvailableCopies(int availableCopies) {
         this.availableCopies = availableCopies;
+    }
+
+    public EditBookDTO(Integer id, String isbn, String title, String author, String publisher, Integer publicationYear, int availableCopies) {
+        this.id = id;
+        this.isbn = isbn;
+        this.title = title;
+        this.author = author;
+        this.publisher = publisher;
+        this.publicationYear = publicationYear;
+        this.availableCopies = availableCopies;
+    }
+
+    public EditBookDTO() {
     }
 }

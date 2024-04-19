@@ -2,7 +2,8 @@ package library.service;
 
 import library.common.UserRole;
 import library.controller.DTO.UserDTO.GetUserFullDTO;
-import library.exception.UserNotFound;
+import library.exception.UserNotFoundForId;
+import library.exception.UserNotFoundForUsername;
 import library.infrastructure.entity.AuthEntity;
 import library.infrastructure.entity.UserEntity;
 import library.infrastructure.repository.AuthRepository;
@@ -29,22 +30,28 @@ public class UserService {
         ArrayList<UserEntity> users = (ArrayList<UserEntity>) userRepository.findAll();
         ArrayList<GetUserFullDTO> getUserDTO = new ArrayList<>();
         for (UserEntity user : users) {
-            AuthEntity auth = authRepository.findByUserId(user.getId()).orElseThrow(() -> UserNotFound.create(user.getId()));
+            AuthEntity auth = authRepository.findByUserId(user.getId()).orElseThrow(() -> UserNotFoundForId.create(user.getId()));
             getUserDTO.add(mapUser(user, auth));
         }
         return getUserDTO;
     }
 
-    public GetUserFullDTO getOne(int id) {
-        UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> UserNotFound.create(id));
-        AuthEntity authEntity = authRepository.findByUserId(id).orElseThrow(() -> UserNotFound.create(id));
+    public GetUserFullDTO getById(int id) {
+        UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> UserNotFoundForId.create(id));
+        AuthEntity authEntity = authRepository.findByUserId(id).orElseThrow(() -> UserNotFoundForId.create(id));
+        return mapUser(userEntity, authEntity);
+    }
+
+    public GetUserFullDTO getByUsername(String username) {
+        AuthEntity authEntity = authRepository.findByUsername(username).orElseThrow(() -> UserNotFoundForUsername.create(username));
+        UserEntity userEntity = userRepository.findById(authEntity.getId()).orElseThrow(() -> UserNotFoundForId.create(authEntity.getId()));
         return mapUser(userEntity, authEntity);
     }
 
     @Transactional
     public void deleteUser(int id) {
         if (!userRepository.existsById(id)) {
-            throw UserNotFound.create(id);
+            throw UserNotFoundForId.create(id);
         }
         authRepository.deleteByUserId(id);
         userRepository.deleteById(id);

@@ -1,5 +1,6 @@
 package library.controller.DTO.AuthDTO;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -7,14 +8,19 @@ import library.common.UserRole;
 
 public class RegisterDTO {
     @NotBlank(message = "Name is required!")
+    @Schema(name = "name", example = "John Doe")
     private String name;
     @NotBlank(message = "Username is required!")
+    @Schema(name = "username", example = "username")
     private String username;
     @NotBlank(message = "Password is required!")
+    @Schema(name = "password", example = "Password@Me00")
     private String password;
     @NotNull
+    @Schema(name = "role", example = "ROLE_READER")
     private UserRole role;
     @NotBlank(message = "Email is required!")
+    @Schema(name = "email", example = "john.doe@gmail.com")
     @Email
     private String email;
 

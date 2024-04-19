@@ -1,5 +1,6 @@
 package library.infrastructure.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -10,24 +11,31 @@ public class BookEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
+    @Schema(name = "id", example = "2")
     private Integer id;
     @Basic
     @Column(name = "isbn", unique = true)
+    @Schema(name = "isbn", example = "9781408855670")
     private String isbn;
     @Basic
     @Column(name = "title")
+    @Schema(name = "title", example = "Harry Potter and the Chamber of Secrets")
     private String title;
     @Basic
     @Column(name = "author")
+    @Schema(name = "author", example = "J.K. Rowling")
     private String author;
     @Basic
     @Column(name = "publisher")
+    @Schema(name = "publisher", example = "Bloomsbury")
     private String publisher;
     @Basic
     @Column(name = "publication_year")
+    @Schema(name = "publicationYear", example = "2018")
     private Integer publicationYear;
     @Basic
     @Column(name = "available_copies")
+    @Schema(name = "availableCopies", example = "60")
     private Integer availableCopies;
 
 

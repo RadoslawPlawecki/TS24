@@ -1,16 +1,23 @@
 package library.controller.DTO.ReviewDTO;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import library.infrastructure.entity.BookEntity;
 import library.infrastructure.entity.UserEntity;
 
 import java.sql.Date;
 
 public class CreateReviewResponseDTO {
+    @Schema(name = "id", example = "1")
     private Integer id;
+    @Schema(name = "book", example = "2")
     private BookEntity book;
+    @Schema(name = "user", example = "5")
     private UserEntity user;
+    @Schema(name = "rating", example = "10")
     private Integer rating;
+    @Schema(name = "comment", example = "Amazing!")
     private String comment;
+    @Schema(name = "reviewDate", example = "2024-04-19")
     private Date reviewDate;
 
     public Integer getId() {

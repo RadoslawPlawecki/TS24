@@ -1,5 +1,6 @@
 package library.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import library.controller.DTO.ReviewDTO.CreateReviewDTO;
 import library.controller.DTO.ReviewDTO.CreateReviewResponseDTO;
 import library.controller.DTO.ReviewDTO.EditReviewDTO;
@@ -9,11 +10,11 @@ import library.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/review")
+@Tag(name = "Review")
 public class ReviewController {
     private final ReviewService reviewService;
 
@@ -24,15 +25,15 @@ public class ReviewController {
 
     @PostMapping("/add")
     @ResponseStatus(code= HttpStatus.CREATED)
-    public ResponseEntity<CreateReviewResponseDTO> addReview(@RequestBody CreateReviewDTO review) {
-        var newReview = reviewService.addReview(review);
+    public ResponseEntity<CreateReviewResponseDTO> addReview(@RequestBody CreateReviewDTO reviewDTO) {
+        var newReview = reviewService.addReview(reviewDTO);
         return new ResponseEntity<>(newReview, HttpStatus.CREATED);
     }
 
     @PatchMapping("/edit")
     @ResponseStatus(code = HttpStatus.OK)
-    public ResponseEntity<EditReviewResponseDTO> editReview(@RequestBody EditReviewDTO review) {
-        var editedReview = reviewService.editReview(review);
+    public ResponseEntity<EditReviewResponseDTO> editReview(@RequestBody EditReviewDTO reviewDTO) {
+        var editedReview = reviewService.editReview(reviewDTO);
         return new ResponseEntity<>(editedReview, HttpStatus.OK);
     }
 
@@ -43,8 +44,8 @@ public class ReviewController {
     }
 
     @GetMapping("/{id}")
-    public ReviewEntity getOne(@PathVariable int id) {
-        return reviewService.getOne(id);
+    public ReviewEntity getById(@PathVariable int id) {
+        return reviewService.getById(id);
     }
 
     @GetMapping("/get")

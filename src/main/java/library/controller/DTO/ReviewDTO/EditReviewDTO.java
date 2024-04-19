@@ -1,10 +1,15 @@
 package library.controller.DTO.ReviewDTO;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.sql.Date;
 
 public class EditReviewDTO {
+    @Schema(name = "id", example = "1")
     private Integer id;
+    @Schema(name = "rating", example = "10")
     private Integer rating;
+    @Schema(name = "comment", example = "Amazing!")
     private String comment;
 
     public Integer getId() {

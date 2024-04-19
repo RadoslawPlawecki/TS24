@@ -1,7 +1,9 @@
 package library.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import library.controller.DTO.BookDTO.CreateBookDTO;
 import library.controller.DTO.BookDTO.CreateBookResponseDTO;
+import library.controller.DTO.BookDTO.EditBookDTO;
 import library.controller.DTO.BookDTO.GetBookDTO;
 import library.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +13,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 
 @RestController
 @RequestMapping("/book")
 @PreAuthorize("hasRole('ADMIN')")
+@Tag(name = "Book")
 public class BookController {
     private final BookService bookService;
 
@@ -27,8 +29,8 @@ public class BookController {
 
     @PostMapping("/add")
     @ResponseStatus(code= HttpStatus.CREATED)
-    public ResponseEntity<CreateBookResponseDTO> addBook(@RequestBody CreateBookDTO book) {
-        var newBook = bookService.addBook(book);
+    public ResponseEntity<CreateBookResponseDTO> addBook(@RequestBody CreateBookDTO bookDTO) {
+        var newBook = bookService.addBook(bookDTO);
         return new ResponseEntity<>(newBook, HttpStatus.CREATED);
     }
 
@@ -39,14 +41,21 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_READER')")
-    public GetBookDTO getOne(@PathVariable int id) {
-        return bookService.getOne(id);
+    @PreAuthorize("hasAnyRole('ADMIN', 'READER')")
+    public GetBookDTO getById(@PathVariable int id) {
+        return bookService.getById(id);
     }
 
     @GetMapping("/get")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_READER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'READER')")
     public @ResponseBody List<GetBookDTO> getAll() {
         return bookService.getAll();
+    }
+
+    @PatchMapping("/edit")
+    @ResponseStatus(code = HttpStatus.OK)
+    public ResponseEntity<GetBookDTO> editBook(@RequestBody EditBookDTO bookDTO) {
+        var bookEdited = bookService.editBook(bookDTO);
+        return new ResponseEntity<>(bookEdited, HttpStatus.OK);
     }
 }

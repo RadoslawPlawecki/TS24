@@ -1,8 +1,13 @@
 package library.controller.DTO.UserDTO;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class GetUserSimplifiedDTO {
+    @Schema(name = "id", example = "2")
     private Integer id;
+    @Schema(name = "name", example = "John Doe")
     private String name;
+    @Schema(name = "email", example = "john.doe@gmail.com")
     private String email;
 
     public Integer getId() {

@@ -7,7 +7,7 @@ import library.controller.DTO.ReviewDTO.EditReviewResponseDTO;
 import library.exception.BookNotFound;
 import library.exception.RatingOverScale;
 import library.exception.ReviewNotFound;
-import library.exception.UserNotFound;
+import library.exception.UserNotFoundForId;
 import library.infrastructure.entity.BookEntity;
 import library.infrastructure.entity.ReviewEntity;
 import library.infrastructure.entity.UserEntity;
@@ -37,14 +37,14 @@ public class ReviewService {
         return reviewRepository.findAll();
     }
 
-    public ReviewEntity getOne(int id) {
+    public ReviewEntity getById(int id) {
         return reviewRepository.findById(id).orElseThrow(() -> new RuntimeException("Review not found!"));
     }
 
     @Transactional
     public CreateReviewResponseDTO addReview(CreateReviewDTO reviewDTO) {
         BookEntity book = bookRepository.findById(reviewDTO.getBookId()).orElseThrow(() -> BookNotFound.create(reviewDTO.getBookId()));
-        UserEntity user = userRepository.findById(reviewDTO.getUserId()).orElseThrow(() -> UserNotFound.create(reviewDTO.getUserId()));
+        UserEntity user = userRepository.findById(reviewDTO.getUserId()).orElseThrow(() -> UserNotFoundForId.create(reviewDTO.getUserId()));
         ReviewEntity review = new ReviewEntity();
         review.setBook(book);
         review.setUser(user);
