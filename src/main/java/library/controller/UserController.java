@@ -16,6 +16,7 @@ import java.util.List;
 @RequestMapping("/user")
 @PreAuthorize("hasRole('ADMIN')")
 @Tag(name = "User")
+@CrossOrigin
 public class UserController {
     private final UserService userService;
 

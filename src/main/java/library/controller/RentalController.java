@@ -16,6 +16,7 @@ import java.util.List;
 @RequestMapping("/rental")
 @PreAuthorize("hasRole('ADMIN')")
 @Tag(name = "Rental")
+@CrossOrigin
 public class RentalController {
     private final RentalService rentalService;
 

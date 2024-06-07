@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 @PreAuthorize("hasRole('ADMIN')")
 @Tag(name = "Auth")
+@CrossOrigin
 public class AuthController {
     private final AuthService authService;
     @Autowired

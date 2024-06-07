@@ -19,6 +19,7 @@ import java.util.List;
 @RequestMapping("/book")
 @PreAuthorize("hasRole('ADMIN')")
 @Tag(name = "Book")
+@CrossOrigin
 public class BookController {
     private final BookService bookService;
 
