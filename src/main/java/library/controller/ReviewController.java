@@ -1,16 +1,15 @@
 package library.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import library.controller.DTO.ReviewDTO.CreateReviewDTO;
-import library.controller.DTO.ReviewDTO.CreateReviewResponseDTO;
-import library.controller.DTO.ReviewDTO.EditReviewDTO;
-import library.controller.DTO.ReviewDTO.EditReviewResponseDTO;
+import library.controller.DTO.ReviewDTO.*;
 import library.infrastructure.entity.ReviewEntity;
 import library.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/review")
@@ -50,7 +49,8 @@ public class ReviewController {
     }
 
     @GetMapping("/get")
-    public @ResponseBody Iterable<ReviewEntity> getAll() {
-        return reviewService.getAll();
+    public @ResponseBody ResponseEntity<List<GetReviewDTO>> getAll(@RequestParam(required = false) Integer bookId, @RequestParam(required = false) Integer userId) {
+        List<GetReviewDTO> getReviewDTO = reviewService.getAll(bookId, userId);
+        return new ResponseEntity<>(getReviewDTO, HttpStatus.OK);
     }
 }

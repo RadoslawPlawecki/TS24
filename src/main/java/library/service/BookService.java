@@ -3,8 +3,12 @@ package library.service;
 import library.controller.DTO.BookDTO.*;
 import library.exception.BookInvalidNumber;
 import library.exception.BookNotFound;
+import library.exception.PendingReturn;
 import library.infrastructure.entity.BookEntity;
+import library.infrastructure.entity.RentalEntity;
 import library.infrastructure.repository.BookRepository;
+import library.infrastructure.repository.RentalRepository;
+import library.infrastructure.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,10 +20,14 @@ import java.util.stream.Collectors;
 @Service
 public class BookService {
     private final BookRepository bookRepository;
+    private final RentalRepository rentalRepository;
+    private final ReviewRepository reviewRepository;
 
     @Autowired
-    public BookService(BookRepository bookRepository) {
+    public BookService(BookRepository bookRepository, RentalRepository rentalRepository, ReviewRepository reviewRepository) {
         this.bookRepository = bookRepository;
+        this.rentalRepository = rentalRepository;
+        this.reviewRepository = reviewRepository;
     }
 
     public List<GetBookDTO> getAll() {
@@ -46,11 +54,34 @@ public class BookService {
         return new CreateBookResponseDTO(newBook.getId(), newBook.getIsbn(), newBook.getTitle(), newBook.getAuthor(), newBook.getPublisher(), newBook.getPublicationYear(), newBook.getAvailableCopies());
     }
 
+    @Transactional
     public void deleteBook(int id) {
         if (!bookRepository.existsById(id)) {
             throw BookNotFound.create(id);
         }
-        bookRepository.deleteById(id);
+        boolean noPendingReturns = false;
+        if (!rentalRepository.findByBookId(id).isEmpty()) {
+            List<RentalEntity> rentals = rentalRepository.findByBookId(id);
+            for (RentalEntity rental : rentals) {
+                if (rental.getReturnDate() != null) {
+                    noPendingReturns = true;
+                } else {
+                    throw PendingReturn.create(rental.getBook().getTitle());
+                }
+            }
+        } else {
+            if (!reviewRepository.findByBookId(id).isEmpty()) {
+                bookRepository.deleteById(id);
+            } else {
+                reviewRepository.deleteByBookId(id);
+                bookRepository.deleteById(id);
+            }
+        }
+        if (noPendingReturns) {
+            rentalRepository.deleteByBookId(id);
+            reviewRepository.deleteByBookId(id);
+            bookRepository.deleteById(id);
+        }
     }
 
     public GetBookDTO editBook(EditBookDTO bookDTO) {

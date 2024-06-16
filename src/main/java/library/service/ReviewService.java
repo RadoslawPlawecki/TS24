@@ -1,9 +1,8 @@
 package library.service;
 
-import library.controller.DTO.ReviewDTO.CreateReviewDTO;
-import library.controller.DTO.ReviewDTO.CreateReviewResponseDTO;
-import library.controller.DTO.ReviewDTO.EditReviewDTO;
-import library.controller.DTO.ReviewDTO.EditReviewResponseDTO;
+import library.controller.DTO.BookDTO.GetBookDTO;
+import library.controller.DTO.ReviewDTO.*;
+import library.controller.DTO.UserDTO.GetUserSimplifiedDTO;
 import library.exception.BookNotFound;
 import library.exception.RatingOverScale;
 import library.exception.ReviewNotFound;
@@ -19,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ReviewService {
@@ -33,8 +34,16 @@ public class ReviewService {
         this.bookRepository = bookRepository;
     }
 
-    public Iterable<ReviewEntity> getAll() {
-        return reviewRepository.findAll();
+    public List<GetReviewDTO> getAll(Integer bookId, Integer userId) {
+        List<ReviewEntity> reviews;
+        if (bookId != null && userId == null) {
+            reviews = reviewRepository.findByBookId(bookId);
+        } else if (bookId == null & userId != null) {
+            reviews = reviewRepository.findByUserId(userId);
+        } else {
+            reviews = (List<ReviewEntity>) reviewRepository.findAll();
+        }
+        return reviews.stream().map(this::mapReview).collect(Collectors.toList());
     }
 
     public ReviewEntity getById(int id) {
@@ -70,5 +79,11 @@ public class ReviewService {
         review.setReviewDate(new Date(System.currentTimeMillis()));
         reviewRepository.save(review);
         return new EditReviewResponseDTO(review.getId(), review.getBook(), review.getUser(), reviewDTO.getRating(), reviewDTO.getComment(), review.getReviewDate());
+    }
+
+    private GetReviewDTO mapReview(ReviewEntity review) {
+        GetBookDTO book = new GetBookDTO(review.getBook().getId(), review.getBook().getIsbn(), review.getBook().getTitle(), review.getBook().getAuthor(), review.getBook().getPublisher(), review.getBook().getPublicationYear(), review.getBook().getAvailableCopies() > 0);
+        GetUserSimplifiedDTO user = new GetUserSimplifiedDTO(review.getUser().getId(), review.getUser().getName(), review.getUser().getEmail());
+        return new GetReviewDTO(review.getId(), book, user, review.getRating(), review.getComment(), review.getReviewDate());
     }
 }

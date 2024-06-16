@@ -11,4 +11,7 @@ import java.util.Optional;
 @Repository
 public interface RentalRepository extends CrudRepository<RentalEntity, Integer> {
     List<RentalEntity> findByUserId(int userId);
+    List<RentalEntity> findByBookId(int bookId);
+    void deleteByUserId(int userId);
+    void deleteByBookId(int bookId);
 }

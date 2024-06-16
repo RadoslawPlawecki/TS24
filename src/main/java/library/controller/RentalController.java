@@ -45,6 +45,7 @@ public class RentalController {
     }
 
     @GetMapping("/get")
+    @PreAuthorize("hasAnyRole('ADMIN', 'READER')")
     public @ResponseBody ResponseEntity<List<GetRentalDTO>> getAll(@RequestParam(required = false) Integer userId) {
         List<GetRentalDTO> getRentalDTO = rentalService.getAll(userId);
         return new ResponseEntity<>(getRentalDTO, HttpStatus.OK);
